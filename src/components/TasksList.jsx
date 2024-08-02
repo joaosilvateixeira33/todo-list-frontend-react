@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { deleteTask, getTasks } from '../services/taskService.jsx';
-import { TaskCreateForm } from './TaskForm.jsx';
+import { deleteTask, getTasks } from '../services/taskService';
+import { TaskCreateForm } from './TaskForm';
+import TaskEditForm from './TaskEditForm';
 
 const TaskList = () => {
   const [tasks, setTasks] = useState([]);
@@ -8,18 +9,18 @@ const TaskList = () => {
   const [error, setError] = useState(null);
   const [editTaskId, setEditTaskId] = useState(null);
 
-  useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const fetchedTasks = await getTasks();
-        setTasks(fetchedTasks);
-      } catch (error) {
-        setError('Failed to fetch tasks');
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchTasks = async () => {
+    try {
+      const fetchedTasks = await getTasks();
+      setTasks(fetchedTasks);
+    } catch (error) {
+      setError('Failed to fetch tasks');
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchTasks();
   }, []);
 
@@ -41,6 +42,14 @@ const TaskList = () => {
     setEditTaskId(null);
   };
 
+  const handleTaskCreated = () => {
+    fetchTasks(); // Atualize a lista de tarefas após a criação
+  };
+
+  const handleTaskUpdated = () => {
+    fetchTasks(); // Atualize a lista de tarefas após a edição
+  };
+
   const getStatusClass = (status) => {
     switch (status) {
       case 'Incompleta':
@@ -55,11 +64,11 @@ const TaskList = () => {
   };
 
   if (loading) return <p>Loading tasks...</p>;
-  if (error) return <p>{error}</p>;
+  if (error) return <p className="error">{error}</p>;
 
   return (
     <div className='task_container'>
-      <TaskCreateForm/>
+      <TaskCreateForm onTaskCreated={handleTaskCreated} />
       {tasks.map(task => (
         <li key={task.id}>
           <div className={`card ${editTaskId === task.id ? 'flipped' : ''}`}>
@@ -70,13 +79,26 @@ const TaskList = () => {
                 <span className={getStatusClass(task.status)}></span> 
                 {task.status}
               </p>
-              <button onClick={() => handleDelete(task.id)} className='btn'><i className="bi bi-trash2-fill"></i></button>
-              <button onClick={() => handleEditClick(task.id)} className='btn'><i className="bi bi-pencil-fill"></i></button>
+              <div className='container_btn_front'>
+                <button onClick={() => handleDelete(task.id)} className='btn'>
+                  <i className="bi bi-trash2-fill"></i>
+                </button>
+                <button onClick={() => handleEditClick(task.id)} className='btn'>
+                  <i className="bi bi-pencil-fill"></i>
+                </button>
+              </div>
             </div>
             <div className="card_back">
-              {/* Aqui você pode incluir o formulário de edição */}
-              <p>Formulário de Edição</p>
-              <button onClick={handleBackClick} className='btn_back'>Voltar</button>
+              {editTaskId === task.id ? (
+                <TaskEditForm
+                  taskId={task.id}
+                  onBack={handleBackClick}
+                  onTaskUpdated={handleTaskUpdated}
+                />
+              ) : (
+                <p>Formulário de Edição</p>
+              )}
+              
             </div>
           </div>
         </li>

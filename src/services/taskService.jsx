@@ -24,7 +24,7 @@ export const createTask = async (task) => {
 
 export const updateTask = async (id, task) => {
     try {
-        const response = await axios.put(`${BASE_URL}/${id}`, task);
+        const response = await axios.patch(`${BASE_URL}/${id}`, task); // Alterado para PATCH
         return response.data;
     } catch (error) {
         console.error('Failed to update task:', error);

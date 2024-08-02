@@ -47,7 +47,7 @@ input, textarea, select {
 }
 
 input:focus, textarea:focus, select:focus {
-    border-color: #FF9800; /* Cor laranja ao focar */
+    border-color: #E3F2FD; /* Cor laranja ao focar */
 }
 
 textarea, input {
@@ -62,7 +62,7 @@ select {
 .btn_submit {
     border-radius: 10px;
     font-weight: 600; /* Peso da fonte para botões de submit */
-    background-color: #FF9800; /* Cor laranja para botões */
+    background-color: #4CAF50; /* Cor laranja para botões */
     border: none;
     color: white;
     padding: 10px 15px;
@@ -71,7 +71,7 @@ select {
 }
 
 .btn_submit:hover {
-    background-color: #e67e00; /* Tom mais escuro no hover */
+    background-color: #22a226; /* Tom mais escuro no hover */
 }
 
 .task_container {
@@ -162,6 +162,11 @@ select {
 
 .status-complete {
     background-color: #4CAF50; /* Verde */
+}
+
+.container_button{
+    display: flex;
+    flex-direction: row;
 }
 
 .btn {
